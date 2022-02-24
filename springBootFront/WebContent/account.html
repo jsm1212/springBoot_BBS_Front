@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>account</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style type="text/css">
+#app{
+	margin: auto;
+	margin-top: 60px;
+	width: 60%;
+	border: 3px solid #8ac007;
+	padding: 10px; 
+}
+p{
+	font-size: 8px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>회원가입</h1>
+
+<div id="app">
+
+	<form id="frm">
+
+	<table border="1">
+	<tr>
+		<td>아이디</td>
+		<td>
+			<input type="text" id="userid" placeholder="아이디입력" size="20">
+			<p id="idcheck"></p>
+			<button type="button" id="idCheckBtn">중복확인</button>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>사용아이디</td>
+		<td>
+			<input type="text" id="id" name="id" size="20" readonly="readonly">
+		</td>
+	</tr>
+	
+	<tr>
+		<td>패스워드</td>
+		<td>
+			<input type="text" id="pwd" name="pwd" placeholder="패스워드입력" size="20">
+		</td>
+	</tr>
+	
+	<tr>
+		<td>이름</td>
+		<td>
+			<input type="text" id="name" name="name" placeholder="이름입력" size="20">
+		</td>
+	</tr>
+	
+	<tr>
+		<td>이메일</td>
+		<td>
+			<input type="text" id="email" name="email" placeholder="이메일입력" size="20">
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2">
+			<button type="button" id="account">회원가입</button>
+		</td>
+	</tr>	
+	
+	</table>
+	
+	</form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+	
+	$("#idCheckBtn").click(function () { // 중복체크를 위한 버튼을 클릭하면
+		$.ajax({
+			url:"http://localhost:3000/getId", // 서버에서 getId 호출
+			type:"post", // post 타입으로
+			data:{ "id":$("#userid").val() }, // 갖고갈 데이터는 id : 사용자가 입력한 id값
+			success:function( msg ){ // 성공하면 메세지 뿌린다.
+				//alert('success');
+				//alert(msg);
+				if(msg.trim() == 'OK'){ // getId 에 return값이 OK면 사용가능
+					$("#idcheck").html("이 아이디는 사용할 수 있습니다");
+					$("#id").val( $("#userid").val() ) // readOnly상태의 id에 사용자가 입력한 id를 뿌려준다.
+				}else{ // getId에 return값이 NO면 사용불가능
+					$("#idcheck").html("이 아이디는 사용중입니다"); 
+					$("#userid").val(""); // 사용자가 입력한 ID값 초기화
+					$("#userid").focus(); 
+				}
+			},
+			error:function(){
+				alert('error');
+			}
+		});		
+	});
+	
+	$("#account").on("click", function () {		
+		//alert('account');
+		
+		let params = $("#frm").serialize() // form안에 name프로퍼티 값을 직렬화해서 변수로 만들어준다. 대신 이렇게하면 정합성검사 불가능
+		
+		// let params = { id:$("#id").val(), pwd:$("#pwd").val(), name:$("#name").val(), email:$("#email").val() };
+		
+		$.ajax({
+			url:"http://localhost:3000/addMember",
+			type:"post",
+			// data:{ id:$("#id").val(), pwd:$("#pwd").val(), name:$("#name").val(), email:$("#email").val() },
+			data:params,
+			success:function(data){
+				//alert("success");
+				if(data == "YES"){
+					alert('가입성공');
+					location.href = "login.html";
+				}else{
+					alert('가입실패');
+				}
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+		
+	});
+	
+});
+</script>
+
+
+</body>
+</html>

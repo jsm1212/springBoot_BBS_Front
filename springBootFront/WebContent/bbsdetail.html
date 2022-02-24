@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel='stylesheet' href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h1>상세 글보기</h1>
+<div id="app" class="container">
+<table class="table table-striped table-hover">
+	<tr>
+		<th>작성자</th>
+		<td id="id"></td>
+	</tr>
+	<tr>
+		<th>제목</th>
+		<td id="title"></td>
+	</tr>
+	<tr>
+		<th>작성일</th>
+		<td id="wdate"></td>
+	</tr>
+	<tr>
+		<th>조회수</th>
+		<td id="readcount"></td>
+	</tr>
+	<tr>
+		<th>내용</th>
+		<td>
+			<textarea id="content" rows="15" cols="100" readonly="readonly"></textarea>
+		</td>
+	</tr>
+	
+</table>
+
+<button type="button" id="bbsanswer">답글</button>
+
+<button type="button" id="bbsupdate">수정</button>
+
+<button type="button" id="bbsdelete">삭제</button>
+
+</div>
+
+<script>
+	const url = new URL(location.href);
+	
+	const urlParams = url.searchParams;
+	
+	let seq = urlParams.get("seq");
+	
+	$.ajax({
+		url:"http://localhost:3000/bbsdetail",
+		type:"get",
+		data:{ seq: seq },
+		success:function(data){
+			$("#id").html(data.id)
+			$("#title").html(data.title)
+			$("#wdate").html(data.wdate)
+			$("#readcount").html(data.readcount)
+			$("#content").val(data.content)
+			
+			let login = JSON.parse(sessionStorage.getItem("login"))
+			
+			if(data.id != login.id){
+				$("#bbsupdate").hide();
+				$("#bbsdelete").hide();
+			}
+		},
+		error:function(){
+			alert("error");
+		}
+	});
+	
+	$("#bbsanswer").click(function(){
+		location.href="bbsanswer.html?seq="+seq;
+	});
+	
+	$("#bbsupdate").click(function(){
+		location.href="bbsupdate.html?seq="+seq;
+	});
+	
+	$("#bbsdelete").click(function(){
+		if(confirm("정말 삭제하시겠습니까?") == true){
+			$.ajax({
+				url:"http://localhost:3000/deleteBbs",
+				type:"get",
+				data:{ seq : seq },
+				success:function( msg ){
+					if( msg == 'y') {
+						alert("삭제되었습니다.");
+						location.href="bbslist.html";
+					}
+				},
+				error:function(){
+					alert("deleteBbs error");
+				}
+			});
+		}
+	});
+	
+</script>
+</body>
+</html>

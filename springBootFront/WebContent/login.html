@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+#app{
+	margin:auto;
+	margin-top:60px;
+	width:60%;
+	padding: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>Login</h1>
+
+<div id="app" class="container">
+	<table class="table table-success table-striped">
+		<tr>
+			<td>아이디</td>
+			<td>
+				<input type="text" id="id" class="form-control" placeholder="아이디 입력" size="20">
+			</td>
+		</tr>
+		<tr>
+			<td>패스워드</td>
+			<td>
+				<input type="text" id="pwd" class="form-control" placeholder="패스워드 입력" size="20">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button type="button" id="login">log-in</button>
+				<a href="account.html">회원가입</a>
+			</td>
+		</tr>
+	</table>
+
+</div>
+
+<script>
+$(document).ready(function(){
+	
+	$("#login").click(function(){
+		
+		$.ajax({
+			url: "http://localhost:3000/login",
+			type:"post",
+			data: { id:$("#id").val(), pwd:$("#pwd").val()},
+			success:function(data){
+				alert('success');
+				if(data == ""){
+					alert("id나 비밀번호를 확인하세요");
+					$("#id").val("");
+					$("#pwd").val("");
+				}else{
+					sessionStorage.setItem("login", JSON.stringify(data)); // JSON data를 문자열로 변환해서 세션스토리지에 넣어줌
+					alert(data.name + " 님 환영합니다.");
+					location.href = "bbslist.html";
+				}
+			},
+			error:function(){
+				alert('error');
+			}
+		});
+		
+		
+	});
+	
+});
+
+</script>
+</body>
+</html>

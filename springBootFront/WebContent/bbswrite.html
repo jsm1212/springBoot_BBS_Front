@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel='stylesheet' href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="app" class="container">
+<form id="frm">
+<table class="table table-striped table-hover">
+	<tr>
+		<th>닉네임</th>
+		<td>
+			<input type="text" id="id" name="id" readonly="readonly" /> 
+		</td>
+	</tr>
+	<tr>
+		<th>제목</th>
+		<td>
+			<input type="text" id="title" name="title"  /> 
+		</td>
+	</tr>
+	<tr>
+		<th>내용</th>
+		<td>
+			<textarea rows="20" cols="80" id="content" name="content"></textarea> 
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2">
+			<button type="button" id="write">글쓰기</button>
+		</td>
+	</tr>
+	</table>
+	</form>
+</div>
+
+	
+
+
+
+<script>
+let str = sessionStorage.getItem("login"); // 세션저장소에서 값 빼옴
+let json = JSON.parse(str)
+
+
+
+$(document).ready(function(){
+	$("#id").val(json.id);
+	
+	$("#write").click(function(){
+		$.ajax({
+			url:"http://localhost:3000/writeBbs",
+			type:"get",
+			data:{id:$("#id").val(), title:$("#title").val(), content:$("#content").val()},
+				// $("#frm").serialize(),
+			success:function(data){
+				if(data == "OK"){
+					alert('성공');
+					location.href = "bbslist.html";
+				}else{
+					alert('실패');
+				}	
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>

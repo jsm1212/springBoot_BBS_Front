@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div>
+<h1>내용</h1>
+
+<table class= "table table-striped table-hover" style="width: 1000px">
+<tr>
+	<th>작성자</th>
+	<td id="_id"></td>
+</tr>
+<tr>
+	<th>제목</th>
+	<td id="_title"></td>
+</tr>
+<tr>
+	<th>작성일</th>
+	<td id="_wdate"></td>
+</tr>
+<tr>
+	<th>내용</th>
+	<td align="center">
+		<textarea id="_content" rows="15" cols="100" readonly="readonly"></textarea>
+	</td>
+</tr>
+</table>
+
+<h1>답글</h1>
+
+
+<table class= "table table-striped table-hover" style="width: 1000px">
+<tr>
+	<th>아이디</th>
+	<td>
+		<input type="text" id="id" readonly="readonly" />
+	</td>
+</tr>
+<tr>
+	<th>제목</th>
+	<td>
+		<input type="text" id="title"  />
+	</td>
+</tr>
+<tr>
+	<th>내용</th>
+	<td>
+		<textarea id="content" rows="20" cols="80" ></textarea>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		<button type="button" id="answerBtn">답글 쓰기</button>
+	</td>
+</tr>
+</table>
+
+</div>
+
+<script>
+$(document).ready(function(){
+	let str = sessionStorage.getItem("login"); // 세션저장소에서 값 빼옴
+	let json = JSON.parse(str)
+	
+	const url = new URL(location.href);
+	
+	const urlParams = url.searchParams;
+	
+	let seq = urlParams.get("seq");
+	
+	$("#id").val(json.id);
+	
+	$.ajax({
+		url:"http://localhost:3000/bbsdetail",
+		type:"get",
+		data:{ seq: seq },
+		success:function(data){
+			$("#_id").html(data.id)
+			$("#_title").html(data.title)
+			$("#_wdate").html(data.wdate)
+			$("#_content").val(data.content)
+		},
+		error:function(){
+			alert("getBbs error");
+		}
+		});
+	
+	$("#answerBtn").click(function(){
+		
+		$.ajax({
+			url:"http://localhost:3000/answer",
+			type:"get",
+			data:{ seq: seq, "id":$("#id").val(), "title":$("#title").val(), "content":$("#content").val() },
+			success:function(msg){
+				if(msg == "OK"){
+					alert('답글이 추가되었습니다');
+					location.href = "bbslist.html";	
+				}else{
+					alert('답글이 추가되지 않았습니다');
+				}
+			},
+			error:function(){
+				alert("reply error");
+			}
+		});
+		
+	});
+	
+	
+});
+</script>
+</body>
+</html>
