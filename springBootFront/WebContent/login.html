@@ -9,35 +9,26 @@
 <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
-
-<div id="app">
-	<table class="container">
-	<tr>
-		<td>
-			<strong>로그인</strong>
-		</td>
-	</tr>
-		<tr>
-			<td>아이디</td>
-			<td>
-				<input type="text" id="id" class="form-control" placeholder="아이디 입력" size="20">
-			</td>
-		</tr>
-		<tr>
-			<td>패스워드</td>
-			<td>
-				<input type="text" id="pwd" class="form-control" placeholder="패스워드 입력" size="20">
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<button type="button" id="login">log-in</button>
-				<a href="account.html">회원가입</a>
-			</td>
-		</tr>
-	</table>
-
+<div id="app" class="d-flex justify-content-center shadow p-3 mb-5 bg-body rounded">
+	<form>
+		<h1>로그인</h1>
+	  <div class="mb-3">
+	    <label for="exampleInputId1" class="form-label">아이디</label>
+	    <input id="id" type="text" class="form-control" id="exampleInputEmail1"  placeholder="아이디 입력"/>
+	  </div>
+	  <div class="mb-3">
+	    <label for="exampleInputPassword1" class="form-label">비밀번호</label>
+	    <input id="pwd" type="password" class="form-control" id="exampleInputPassword1" placeholder="비밀번호 입력"/>
+	  </div>
+	  <div class="mb-3 form-check">
+		   <input id="autoSave" type="checkbox" class="form-check-input" />
+		   <label  class="form-check-label">자동 저장</label>
+	  </div>
+		  <button id="login" type="button" class="btn btn-success">로그인</button>
+		  <a class="btn btn-success" href="account.html" role="button">회원가입</a>
+	</form>
 </div>
+
 
 <script>
 $(document).ready(function(){
@@ -47,9 +38,9 @@ $(document).ready(function(){
 		$.ajax({
 			url: "http://localhost:3000/login",
 			type:"post",
-			data: { id:$("#id").val(), pwd:$("#pwd").val()},
+			data: { id:$("#id").val().trim(), pwd:$("#pwd").val().trim()},
 			success:function(data){
-				alert('success');
+				// alert('success');
 				if(data == ""){
 					alert("id나 비밀번호를 확인하세요");
 					$("#id").val("");
@@ -64,8 +55,14 @@ $(document).ready(function(){
 				alert('error');
 			}
 		});
-		
-		
+	});
+	
+	$("#autoSave").change(function(){
+		if($("#autoSave").is(":checked")){
+			alert("체크");
+		}else{
+			alert("체크 해제");
+		}
 	});
 	
 });

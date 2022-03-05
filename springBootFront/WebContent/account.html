@@ -5,6 +5,8 @@
 <title>account</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <style type="text/css">
 #app{
@@ -16,77 +18,79 @@
 p{
 	font-size: 8px;
 }
+
+#idCheckBtn{
+	width:120px;
+}
+
+.center{
+	text-align:center;
+}
+
 </style>
 
 </head>
 <body>
 
-<h1>회원가입</h1>
 
-<div id="app">
-
+<div id="app" class="shadow p-3 mb-5 bg-body rounded">
+	<h1 align="center">회원가입</h1>
 	<form id="frm">
-
-	<table class="table table-striped table-hover">
-	<tr>
-		<td>아이디</td>
-		<td>
-			<input type="text" id="userid" placeholder="아이디입력" size="20">
-			<p id="idcheck"></p>
-			<button type="button" id="idCheckBtn">중복확인</button>
-		</td>
-	</tr>
 	
-	<tr>
-		<td>사용아이디</td>
-		<td>
-			<input type="text" id="id" name="id" size="20" readonly="readonly">
-		</td>
-	</tr>
+	<div class="mb-3">
+		<label class="form-label">아이디</label>
+			<div class="d-flex">
+				<input type="text" id="userid" class="form-control" placeholder="아이디입력" size="10">
+				<button class="btn btn-success" type="button" id="idCheckBtn">중복확인</button>
+			</div>
+			<div class="form-text"><p id="idcheck" style="color:#00F;">아이디를 입력해주세요</p></div>
+	</div>
 	
-	<tr>
-		<td>패스워드</td>
-		<td>
-			<input type="text" id="pwd" name="pwd" placeholder="패스워드입력" size="20">
-		</td>
-	</tr>
+	<div class="mb-3">
+		<label class="form-label">사용아이디</label>
+		<input type="text" id="id" name="id" class="form-control" readonly="readonly">
+	</div>
 	
-	<tr>
-		<td>이름</td>
-		<td>
-			<input type="text" id="name" name="name" placeholder="이름입력" size="20">
-		</td>
-	</tr>
+	<div class="mb-3">
+		<label class="form-label">비밀번호</label>
+		<input type="password" id="pwd" name="pwd" class="form-control" placeholder="비밀번호 입력">
+	</div>
 	
-	<tr>
-		<td>이메일</td>
-		<td>
-			<input type="text" id="email" name="email" placeholder="이메일입력" size="20">
-		</td>
-	</tr>
+	<div class="mb-3">
+		<label class="form-label">비밀번호 확인</label>
+		<input type="password" id="pwdCheck" name="pwdCheck" class="form-control" placeholder="비밀번호 재입력">
+	</div>
 	
-	<tr>
-		<td colspan="2">
-			<button type="button" id="account">회원가입</button>
-		</td>
-	</tr>	
+	<div class="mb-3">
+		<label class="form-label">이름</label>
+		<input type="text" id="name" name="name" class="form-control" placeholder="이름 입력">
+	</div>
 	
-	</table>
-	
+	<div class="mb-3">
+		<label class="form-label">이메일</label>
+		<input type="email" id="email" name="email" class="form-control" placeholder="이메일 입력">
+	</div>
+	<div class="center">
+	<button id="account" type="button" class="btn btn-success">가입하기</button>
+	</div>
 	</form>
 </div>
 
 <script type="text/javascript">
 $(document).ready(function () {
 	
+	
 	$("#idCheckBtn").click(function () { // 중복체크를 위한 버튼을 클릭하면
+		
+		if( $("#userid").val().trim() !=""){
 		$.ajax({
 			url:"http://localhost:3000/getId", // 서버에서 getId 호출
 			type:"post", // post 타입으로
-			data:{ "id":$("#userid").val() }, // 갖고갈 데이터는 id : 사용자가 입력한 id값
+			data:{ "id":$("#userid").val().trim() }, // 갖고갈 데이터는 id : 사용자가 입력한 id값
 			success:function( msg ){ // 성공하면 메세지 뿌린다.
 				//alert('success');
 				//alert(msg);
+		
 				if(msg.trim() == 'OK'){ // getId 에 return값이 OK면 사용가능
 					$("#idcheck").html("이 아이디는 사용할 수 있습니다");
 					$("#id").val( $("#userid").val() ) // readOnly상태의 id에 사용자가 입력한 id를 뿌려준다.
@@ -99,7 +103,10 @@ $(document).ready(function () {
 			error:function(){
 				alert('error');
 			}
-		});		
+		});	
+		} else{
+			alert("아이디를 입력해주세요");
+		}
 	});
 	
 	$("#account").on("click", function () {		
@@ -108,7 +115,7 @@ $(document).ready(function () {
 		let params = $("#frm").serialize() // form안에 name프로퍼티 값을 직렬화해서 변수로 만들어준다. 대신 이렇게하면 정합성검사 불가능
 		
 		// let params = { id:$("#id").val(), pwd:$("#pwd").val(), name:$("#name").val(), email:$("#email").val() };
-		
+		if( $("#pwdCheck").val().trim() == $("#pwd").val().trim()){
 		$.ajax({
 			url:"http://localhost:3000/addMember",
 			type:"post",
@@ -127,6 +134,9 @@ $(document).ready(function () {
 				alert("error");
 			}
 		});
+		}else{
+			alert("비밀번호가 다릅니다.");
+		}
 		
 	});
 	
