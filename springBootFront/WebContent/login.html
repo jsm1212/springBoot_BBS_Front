@@ -46,7 +46,7 @@ $(document).ready(function(){
 					$("#id").val("");
 					$("#pwd").val("");
 				}else{
-					sessionStorage.setItem("login", JSON.stringify(data)); // JSON data를 문자열로 변환해서 세션스토리지에 넣어줌
+					sessionStorage.setItem("login", JSON.stringify(data));// JSON data를 문자열로 변환해서 세션스토리지에 넣어줌
 					alert(data.name + " 님 환영합니다.");
 					location.href = "bbslist.html";
 				}

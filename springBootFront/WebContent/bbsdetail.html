@@ -9,14 +9,14 @@
 <body>
 <h1 align="center">상세 글보기</h1>
 <div align="center">
-<button type="button" id="bbsanswer">답글</button>
+<button type="button" class="btn btn-success" id="bbsanswer">답글</button>
 
-<button type="button" id="bbsupdate">수정</button>
+<button type="button" class="btn btn-success" id="bbsupdate">수정</button>
 
-<button type="button" id="bbsdelete">삭제</button>
+<button type="button" class="btn btn-success" id="bbsdelete">삭제</button>
 </div>
 <div id="app" class="container">
-<table class="table table-striped table-hover">
+<table class="table table-hover">
 	<tr>
 		<th>작성자</th>
 		<td id="id"></td>
@@ -36,19 +36,19 @@
 	<tr>
 		<th>내용</th>
 		<td>
-			<textarea id="content" rows="15" cols="100" readonly="readonly"></textarea>
+			<textarea id="content" class="form-control" rows="15" cols="100" readonly="readonly"></textarea>
 		</td>
 	</tr>
 	
 </table>
 
-<div align="center">
-<textarea id="comment" rows="3" cols="100"></textarea>
-<button type="button" id="commentBtn">댓글달기</button>
+<div class="input-group mb-3" align="center">
+<textarea id="comment" class="form-control" rows="3" cols="100" ></textarea>
+<button type="button" id="commentBtn" class="btn btn-success btn-sm">댓글달기</button>
 </div>
-
+&nbsp;&nbsp;
 <div>
-<table id="commentTb">
+<table id="commentTb" class="table table-hover table-bordered">
 
 </table>
 </div>
@@ -62,8 +62,9 @@
 	
 	let seq = urlParams.get("seq");
 	
-	let login = JSON.parse(sessionStorage.getItem("login"));
+	let ref = urlParams.get("ref");
 	
+	let login = JSON.parse(sessionStorage.getItem("login"));
 	
 	$.ajax({
 		url:"http://localhost:3000/bbsdetail",
@@ -112,6 +113,32 @@
 			});
 		}
 	});
+	/*
+	$.ajax({
+		url:"http://localhost:3000/getBbsList",
+		type:"get",
+		success:function(list){
+			// alert(JSON.stringify(list));
+			$.each(list,function(i, item){
+				if(item.step>0 && item.ref==ref){
+				let str = "<tr>" 
+				+ "<th>" + (i+1) + "</th>"
+				+ "<td>" + getArrow(item.depth)+ "<a href='bbsdetail.html?seq="+ item.seq + "'>" + item.title + "</a></td>"
+				+ "<td>" + item.id + "</td>"
+				+ "<td>" + item.seq + "</td>"
+				+ "<td>" + item.ref + "</td>"
+				+ "<td>" + item.step + "</td>"
+				+ "</tr>";
+				
+				$("#commentTb").append(str);
+				}
+			});
+		},
+		error:function(){
+			alert('error');
+		}
+	});
+	*/
 	
 	 $("#commentBtn").click(function(){
 		$.ajax({
@@ -137,11 +164,11 @@
 		success:function(list){
 			$.each(list,function(i, item){
 				let str = "<tr>" 
-				+ "<td>" + item.id +"</td>"
-				+ "<td>" + item.wdate + "</td>"
+				+ "<td>" + "작성자: " + item.id +"</td>"
+				+ "<td align='right'>" + "작성일: " + item.wdate + "</td>"
 				+ "</tr>"
 				+"<tr>"
-				+"<td>" + item.content + "</td>"
+				+"<td colspan='2'>" + "내용:<br>" + item.content + "</td>"
 				+"</tr>";
 				
 				$("#commentTb").append(str);
@@ -151,7 +178,19 @@
 			alert('error');
 		}
 	}); 
-
+	
+	/*
+	function getArrow( depth ) {
+		let res = "<img src ='./image/arrow.png' width='20px' height='20px'/>";
+		let nbsp = "&nbsp;&nbsp;&nbsp;&nbsp;";
+			
+		let ts = "";
+		for(i = 0; i < depth; i++){
+			ts += nbsp;
+		}
+		return depth==0?"":ts+res;
+	}
+	*/
 </script>
 </body>
 </html>

@@ -9,9 +9,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h1>상세 글보기</h1>
 <div id="app" class="container">
-<table class="table table-striped table-hover">
+<h1 align="center">작성글</h1>
+<table class="table table-hover">
 	<tr>
 		<th>작성자</th>
 		<td id="id"></td>
@@ -19,7 +19,7 @@
 	<tr>
 		<th>제목</th>
 		<td>
-			<input id="title" type="text"/>
+			<input id="title" class="form-control" type="text"/>
 		</td>
 	</tr>
 	<tr>
@@ -33,12 +33,12 @@
 	<tr>
 		<th>내용</th>
 		<td>
-			<textarea id="content" rows="15" cols="100"></textarea>
+			<textarea id="content" class="form-control" rows="15" cols="100"></textarea>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">
-		<button type="button" id="updateBtn">수정하기</button>
+		<td align="center" colspan="2">
+		<button type="button" class="btn btn-success" id="updateBtn">수정하기</button>
 	</td>
 	</tr>
 	
