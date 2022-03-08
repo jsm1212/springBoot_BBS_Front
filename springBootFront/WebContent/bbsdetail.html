@@ -41,12 +41,8 @@
 	</tr>
 	
 </table>
-
-<div class="input-group mb-3" align="center">
-<textarea id="comment" class="form-control" rows="3" cols="100" ></textarea>
-<button type="button" id="commentBtn" class="btn btn-success btn-sm">댓글달기</button>
-</div>
 &nbsp;&nbsp;
+<span>댓글</span>
 <div>
 <table id="commentTb" class="table table-hover table-bordered">
 
@@ -113,22 +109,21 @@
 			});
 		}
 	});
-	/*
+
 	$.ajax({
 		url:"http://localhost:3000/getBbsList",
 		type:"get",
 		success:function(list){
 			// alert(JSON.stringify(list));
 			$.each(list,function(i, item){
-				if(item.step>0 && item.ref==ref){
-				let str = "<tr>" 
-				+ "<th>" + (i+1) + "</th>"
+				if(item.step>=0 && item.ref==ref && item.step>0){
+				let str = "<tr>"
+				+ "<td>" + "작성자: "+ item.id + "</td>"
+				+ "</tr>"
+				+"<tr>"
 				+ "<td>" + getArrow(item.depth)+ "<a href='bbsdetail.html?seq="+ item.seq + "'>" + item.title + "</a></td>"
-				+ "<td>" + item.id + "</td>"
-				+ "<td>" + item.seq + "</td>"
-				+ "<td>" + item.ref + "</td>"
-				+ "<td>" + item.step + "</td>"
-				+ "</tr>";
+				+"</tr>"
+				;
 				
 				$("#commentTb").append(str);
 				}
@@ -138,8 +133,9 @@
 			alert('error');
 		}
 	});
-	*/
+
 	
+	/*
 	 $("#commentBtn").click(function(){
 		$.ajax({
 			url:"http://localhost:3000/insertComment",
@@ -178,8 +174,8 @@
 			alert('error');
 		}
 	}); 
-	
-	/*
+	*/
+
 	function getArrow( depth ) {
 		let res = "<img src ='./image/arrow.png' width='20px' height='20px'/>";
 		let nbsp = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -188,9 +184,9 @@
 		for(i = 0; i < depth; i++){
 			ts += nbsp;
 		}
-		return depth==0?"":ts+res;
+		return depth==1?"":ts+res;
 	}
-	*/
+
 </script>
 </body>
 </html>

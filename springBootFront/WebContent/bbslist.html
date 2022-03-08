@@ -81,6 +81,7 @@ let json = JSON.parse(str); // 문자열을 JSON으로 파싱
 	
 	$("#logout").click(function(){
 		if(confirm("로그아웃 하시겠습니까?") == true){
+			alert("로그아웃되었습니다.")
 			sessionStorage.clear();
 			location.href="login.html";
 		}
@@ -131,16 +132,17 @@ let json = JSON.parse(str); // 문자열을 JSON으로 파싱
 				$.each(data,function(i, item){
 					let str = "<tr>" 
 					+ "<th>" + (i+1) + "</th>";
-					
-					if(item.del == 0 ) {
+					if(item.step==0){
+					if(item.del == 0) {
 						str+= "<td>" + getArrow(item.depth) + "&nbsp;&nbsp;<a href='bbsdetail.html?seq="+ item.seq +"&ref="+item.ref+"'>" + item.title + "</a></td>"
 						+ "<td>" + item.id + "</td>"+ "</tr>";
 					}
 					else{
 						str+= "<td align='center'>이 글은 작성자에 의해서 삭제되었습니다.</td>" ;
 					}
-					
+										
 					$("#tbody").append(str);
+					}
 				});
 			},
 			error:function(){
